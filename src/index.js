@@ -1,8 +1,23 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+
+import {UIRouter, UIView, pushStateLocationPlugin} from '@uirouter/react';
+import { states, config } from './statesRouter';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import 'bootstrap/dist/css/bootstrap.css';
+
+ReactDOM.render(
+    <UIRouter plugins={[pushStateLocationPlugin]}
+              config={config}
+              states={states}>
+
+        <UIView render={(RoutedComponent, props) =>
+            <RoutedComponent {...props} key={props.transition} />
+        } />
+
+    </UIRouter>,
+    document.getElementById('root')
+);
+
 registerServiceWorker();
