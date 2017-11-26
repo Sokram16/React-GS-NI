@@ -1,0 +1,2 @@
+export const END_REQUEST = "END_REQUEST";
+export const START_REQUEST = "START_REQUEST";

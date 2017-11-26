@@ -4,13 +4,20 @@
   "private": true,
   "dependencies": {
     "@uirouter/react": "0.5.4",
+    "axios": "0.17.1",
     "bootstrap": "4.0.0-beta.2",
-    "jquery": "^3.2.1",
+    "jquery": "3.2.1",
     "react": "16.1.1",
+    "react-addons-update": "15.6.2",
+    "react-block-ui": "1.1.1",
     "react-dom": "16.1.1",
-    "react-icons": "^2.2.7",
+    "react-icons": "2.2.7",
+    "react-redux": "5.0.6",
     "react-scripts": "1.0.17",
-    "reactstrap": "5.0.0-alpha.4"
+    "react-table": "6.7.4",
+    "reactstrap": "5.0.0-alpha.4",
+    "redux": "3.7.2",
+    "redux-thunk": "2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

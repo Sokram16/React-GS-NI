@@ -1,4 +1,8 @@
 import React, {Component} from 'react';
+import BlockUi from 'react-block-ui';
+
+import {connect} from "react-redux";
+
 
 //iconos
 import User from './images/user.ico';
@@ -13,20 +17,19 @@ import CaretDown from 'react-icons/lib/fa/caret-down';
 
 import './css/style.css';
 import './css/custom.css';
+import "react-table/react-table.css";
 
-class Full extends Component {
+class Layout extends Component {
 
-    toggleNavBar = (e) =>
-    {
+    toggleNavBar = (e) => {
 
         document.getElementsByTagName('body')[0].classList.toggle('sidebar-icon-only');
 
 
     };
 
-    CollapseMenuNav = (e) =>
-    {
-        document.getElementById(''+e).classList.toggle('show');
+    CollapseMenuNav = (e) => {
+        document.getElementById('' + e).classList.toggle('show');
     };
 
     render() {
@@ -34,7 +37,9 @@ class Full extends Component {
 
             <div className="container-scroller ">
 
-                <nav className="navbar bg-primary-gradient col-lg-12 col-12 p-0 fixed-top navbar-inverse d-flex flex-row">
+
+                <nav
+                    className="navbar bg-primary-gradient col-lg-12 col-12 p-0 fixed-top navbar-inverse d-flex flex-row">
                     <div className="bg-white text-center navbar-brand-wrapper">
                         <a className="navbar-brand brand-logo" href="#"><img src={User}/></a>
                         <a className="navbar-brand brand-logo-mini" href="#"><img src={User}
@@ -59,37 +64,41 @@ class Full extends Component {
                                 <a className="nav-link" href="#"><i className="fa fa-th"></i></a>
                             </li>
                         </ul>
-                        <button className="navbar-toggler navbar-toggler-right hidden-lg-up align-self-center" type="button"
+                        <button className="navbar-toggler navbar-toggler-right hidden-lg-up align-self-center"
+                                type="button"
                                 data-toggle="offcanvas">
                             <span className="navbar-toggler-icon"></span>
                         </button>
                     </div>
                 </nav>
 
+
                 <div className="container-fluid">
+
                     <div className="row row-offcanvas row-offcanvas-right">
                         <nav className="bg-white sidebar sidebar-fixed sidebar-offcanvas" id="sidebar">
                             <div className="user-info">
-                                <img src="images/face.jpg" alt="" />
-                                    <p className="name">Aministrador GS</p>
-                                    <p className="designation">Editor</p>
-                                    <span className="online"></span>
+                                <img src="images/face.jpg" alt=""/>
+                                <p className="name">Aministrador GS</p>
+                                <p className="designation">Editor</p>
+                                <span className="online"></span>
                             </div>
                             <ul className="nav">
                                 <li className="nav-item">
                                     <a className="h4 nav-link p-0" href="/">
-                                        <img src={GsIcoPeque} className="icon8-custom mr-2"/>
-                                        <h4 className="menu-title">Inicio</h4>
+                                        <img src={GsIcoPeque} className="icon8-custom mr-3"/>
+                                        <h5 className="menu-title">Inicio</h5>
                                     </a>
                                 </li>
                                 <li className="nav-item">
                                     <a className="h4 nav-link p-0" data-toggle="collapse" href="#collapseExample"
                                        aria-expanded="false" aria-controls="collapseExample"
-                                        onClick={(e) => this.CollapseMenuNav('collapseExample')}
+                                       onClick={(e) => this.CollapseMenuNav('collapseExample')}
                                     >
 
-                                        <img src={InventarioIco} className="icon8-custom mr-2"/>
-                                            <h4 className="menu-title">Inventario<CaretDown/></h4>
+                                        <img src={InventarioIco} className="icon8-custom mr-3"/>
+                                        <h5 className="menu-title">Inventario <CaretDown className="ml-auto"/></h5>
+
                                     </a>
                                     <div className="collapse" id="collapseExample">
                                         <ul className="nav flex-column sub-menu pl-3">
@@ -100,12 +109,12 @@ class Full extends Component {
                                             </li>
                                             <li className="nav-item">
                                                 <a className="nav-link" href="/inventario/bodega">
-                                                   <img src={BodegaIco}/>  Bodegas
+                                                    <img src={BodegaIco}/> Bodegas
                                                 </a>
                                             </li>
                                             <li className="nav-item">
                                                 <a className="nav-link" href="#">
-                                                    <img src={HerramientaIco}/>  Herramientas
+                                                    <img src={HerramientaIco}/> Herramientas
                                                 </a>
                                             </li>
                                             <li className="nav-item">
@@ -119,29 +128,45 @@ class Full extends Component {
                             </ul>
                         </nav>
 
-                        <div className="content-wrapper fondoMainContent">
+                        <BlockUi tag="div" blocking={this.props.loadingData} className="w-100">
 
-                            <div className="w-100">
+                            <div className="content-wrapper fondoMainContent">
 
-                                {this.props.children}
+                                <div className="w-100">
+
+                                    {this.props.children}
+
+                                </div>
 
                             </div>
-
-                        </div>
-                        <footer className="footer">
-                            <div className="container-fluid clearfix">
+                            <footer className="footer">
+                                <div className="container-fluid clearfix">
                       <span className="float-right">
                           <a href="#">Star Admin</a> &copy; 2017
                       </span>
-                            </div>
-                        </footer>
+                                </div>
+                            </footer>
+
+
+                        </BlockUi>
                     </div>
                 </div>
 
+
             </div>
-    )
+        )
     }
 
 }
 
-    export default Full;
+const mapStateToProps = state => {
+    return {
+        loadingData: state.Dashboard.loadingData,
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Layout);
