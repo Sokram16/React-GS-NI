@@ -22,10 +22,7 @@ import "react-table/react-table.css";
 class Layout extends Component {
 
     toggleNavBar = (e) => {
-
         document.getElementsByTagName('body')[0].classList.toggle('sidebar-icon-only');
-
-
     };
 
     CollapseMenuNav = (e) => {
