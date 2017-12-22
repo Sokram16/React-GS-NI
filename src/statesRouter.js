@@ -3,7 +3,7 @@ import {UIRouter, UIView, pushStateLocationPlugin} from '@uirouter/react';
 
 import App from './App';
 import Layout from './Layout';
-import Bodega from './Components/Inventario/Bodega';
+import Bodega from './container/Bodega/index';
 
 // define your states
 const states = [

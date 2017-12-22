@@ -3,24 +3,24 @@ import * as types from '../../actions/dashboard/actions';
 
 
 const initialState = {
-    loadingData: false
+    bodegaForm: {}
 };
-
 
 const dashboard = (state = initialState, action) => {
     switch (action.type) {
 
-        case types.START_REQUEST:
+        case types.ABRIR_FORM_BODEGA:
             return update(state, {
-                loadingData: {
-                    $set: true
+                bodegaForm: {
+                    abierto: {$set: true},
+                    dataForm: {$set: [] }
                 }
             });
 
-        case types.END_REQUEST:
+        case types.CERRAR_FORM_BODEGA:
             return update(state, {
-                loadingData: {
-                    $set: false
+                bodegaForm: {
+                    abierto: {$set: false}
                 }
             });
 

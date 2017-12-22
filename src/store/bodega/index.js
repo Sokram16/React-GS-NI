@@ -1,7 +1,6 @@
 import update from 'react-addons-update';
 import * as types from '../../actions/bodega/actions';
 
-
 const initialState = {
     dataBodega: []
 };

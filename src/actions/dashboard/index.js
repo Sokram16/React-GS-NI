@@ -1,14 +1,19 @@
-import * as types from 'actions';
+import * as types from './actions';
 
-
-export const start_request = () =>{
-    return {
-        type: types.START_REQUEST
-    };
+export const abrirForm = (type) =>{
+    switch (type){
+        case 'bodega':
+            return {
+                type: types.ABRIR_FORM_BODEGA
+            };
+    }
 };
 
-export const end_request = () =>{
-    return {
-        type: types.END_REQUEST
-    };
+export const cerrarForm = (type) =>{
+    switch (type){
+        case 'bodega':
+            return {
+                type: types.CERRAR_FORM_BODEGA
+            };
+    }
 };
