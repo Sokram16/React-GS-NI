@@ -16,7 +16,8 @@ class TableBodega extends React.Component {
     render() {
 
         const props = this.props;
-        const pageSize = (props.data.length<20) ? props.data.length : 20;
+        let pageSize = (props.data.length<20) ? props.data.length : 20;
+        pageSize = (pageSize<5) ? 5 : pageSize;
         return (
             <div className="w-100">
                 <ReactTable data={props.data}
@@ -42,12 +43,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        abrirForm: () => {
-            dispatch(actions.abrirForm('bodega'));
-        },
         editarForm: (data,id) => {
             const editar = find(data,{"id": id});
-            dispatch(actions.abrirForm(editar));
+            dispatch(actions.dataFormulario(editar));
         }
     };
 };

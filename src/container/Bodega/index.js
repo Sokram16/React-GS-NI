@@ -49,14 +49,14 @@ class Bodega extends React.Component {
         const props = this.props;
         return (
             <Card className="w-100">
-                <CardHeader>
+                <CardHeader className="d-flex justify-content-start p-3">
                     <Button color={"primary"}
                             onClick={(e) => props.abrirForm()}
                     > <FaAgregar/> Agregar</Button>
                 </CardHeader>
                 <CardBody className="d-flex justify-content-start p-3">
 
-                    <div className={(props.isOpen) ? "w-50" : "w-100"}>
+                    <div className={(props.abierto) ? "w-50" : "w-100"}>
                         <TableBodega data={state.data}/>
                     </div>
                     {
@@ -78,7 +78,7 @@ class Bodega extends React.Component {
 
 const mapStateToProps = state => {
 
-    const abierto = (isUndefined(state.Dashboard.bodegaForm.abierto)) ? false : state.Dashboard.bodegaForm.abierto;
+    const abierto = state.Dashboard.abrirFormulario;
 
     return {
         abierto: abierto
@@ -88,7 +88,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         abrirForm: () => {
-            dispatch(actions.abrirForm('bodega'));
+            dispatch(actions.abrirForm(true));
         }
     };
 };

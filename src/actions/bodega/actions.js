@@ -1,2 +1,0 @@
-export const GUADAR_BODEGA = "GUADAR_BODEGA";
-export const ELIMINAR_BODEGA = "ELIMINAR_BODEGA";

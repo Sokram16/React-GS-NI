@@ -1,3 +1,2 @@
-export const ABRIR_FORM_BODEGA = "ABRIR_FORM_BODEGA";
-export const CERRAR_FORM_BODEGA = "CERRAR_FORM_BODEGA";
-export const DATa_FORM_BODEGA = "DATA_FORM_BODEGA";
+export const ABRIR_FORM = "ABRIR_FORM";
+export const DATA_FORM = "DATA_FORM";

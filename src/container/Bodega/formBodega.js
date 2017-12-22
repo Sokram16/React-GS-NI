@@ -6,10 +6,7 @@ import {Card, CardHeader, CardBody, Button, CardFooter} from 'reactstrap';
 import * as actions from '../../actions/dashboard';
 
 //lodash
-import isUndefined from 'lodash/isUndefined';
-
-//componentes
-import TableBodega from './tableBodega';
+import isEmpty from 'lodash/isEmpty';
 
 //icons
 import FaGuardar from 'react-icons/lib/fa/floppy-o';
@@ -21,9 +18,13 @@ class FormBodega extends React.Component {
 
         const props = this.props;
         return (
-            <Card className="w-100 mx-3">
-                <CardHeader>
-
+            <Card className="w-100">
+                <CardHeader className={"p-3 " +(props.editando) ? "bg-info" : "bg-primary"}>
+                    {
+                        (props.editando)
+                        ? <h4>Editando Bodega</h4>
+                            : <h4>Nueva Bodega</h4>
+                    }
                 </CardHeader>
                 <CardBody className="d-flex flex-row">
 
@@ -43,10 +44,12 @@ class FormBodega extends React.Component {
 
 const mapStateToProps = state => {
 
-    const dataForm = (isUndefined(state.Dashboard.bodegaForm.dataForm)) ? [] : state.Dashboard.bodegaForm.dataForm;
+    const dataForm = state.Dashboard.dataFormulario;
+    const editando = (isEmpty(dataForm) || dataForm.id<1) ? false : true;
 
     return {
-        dataForm: dataForm
+        dataForm: dataForm,
+        editando: editando
     };
 
 };
@@ -54,7 +57,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         cerrarForm: () => {
-            dispatch(actions.cerrarForm('bodega'));
+            dispatch(actions.abrirForm(false));
         },
     };
 };

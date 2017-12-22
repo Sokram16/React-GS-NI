@@ -3,26 +3,26 @@ import * as types from '../../actions/dashboard/actions';
 
 
 const initialState = {
-    bodegaForm: {}
+    abrirFormulario: false,
+    dataFormulario: []
 };
 
 const dashboard = (state = initialState, action) => {
     switch (action.type) {
 
-        case types.ABRIR_FORM_BODEGA:
+
+        case types.ABRIR_FORM:
             return update(state, {
-                bodegaForm: {
-                    abierto: {$set: true},
-                    dataForm: {$set: [] }
-                }
+                abrirFormulario: {$set: action.abrir},
+                dataFormulario: {$set: []}
             });
 
-        case types.CERRAR_FORM_BODEGA:
+        case types.DATA_FORM:
             return update(state, {
-                bodegaForm: {
-                    abierto: {$set: false}
-                }
+                abrirFormulario: {$set: true},
+                dataFormulario: {$set: action.data}
             });
+
 
         default:
             return state;
