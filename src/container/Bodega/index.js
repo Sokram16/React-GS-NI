@@ -1,6 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Card, CardHeader, CardBody, Button, Row, Col} from 'reactstrap';
+import GS_Emitter from '../../Emitter/index';
 
 //store
 import * as actions from '../../actions/dashboard';
@@ -9,9 +10,6 @@ import * as actions from '../../actions/dashboard';
 import {serverURL} from "../../Request/apiUrl";
 import axios from "axios/index";
 
-//lodash
-import isUndefined from 'lodash/isUndefined';
-
 //componentes
 import TableBodega from './tableBodega';
 import FormBodega from './formBodega';
@@ -19,29 +17,46 @@ import FormBodega from './formBodega';
 //icons
 import FaAgregar from 'react-icons/lib/fa/plus';
 
+let Subscription = null;
+
 class Bodega extends React.Component {
 
 
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            request: true
+            data: []
         };
     }
 
-    componentDidMount() {
+    // register all adding stuff here
+    componentWillMount() {
+        Subscription = GS_Emitter.addListener('Recargar', () => {
+            this.recargar();
+        });
+    };
 
+    componentDidMount() {
+        this.recargar();
+    };
+
+    // unregister all references here
+    componentWillUnmount() {
+        Subscription.remove();
+    }
+
+    recargar(){
         axios.get(serverURL + 'bodega/getallbodegas', {crossdomain: true})
             .then(function (response) {
-                this.setState({data: response.data, request: false});
+                this.setState({data: response.data});
+                this.props.peticionDeDatos(false);
             }.bind(this))
             .catch(function (error) {
+                this.props.peticionDeDatos(false);
                 console.log("Error", error);
-                this.setState({data: [], request: false});
+                this.setState({data: []});
             }.bind(this));
-
-    };
+    }
 
     render() {
 
@@ -61,7 +76,7 @@ class Bodega extends React.Component {
                             <TableBodega data={state.data}/>
                         </Col>
                         {
-                            (props.abierto && <Col><FormBodega/></Col>)
+                            (props.abierto && <Col><FormBodega recargar={this.recargar} /></Col>)
                         }
                     </Row>
 
@@ -86,6 +101,9 @@ const mapDispatchToProps = dispatch => {
     return {
         abrirForm: () => {
             dispatch(actions.abrirForm(true));
+        },
+        peticionDeDatos: (valor) => {
+            dispatch(actions.peticionDeDatos(valor));
         }
     };
 };

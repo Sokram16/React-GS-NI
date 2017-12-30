@@ -4,6 +4,7 @@ import {Card, CardHeader, CardBody, CardFooter, Form, FormGroup, Input, Button, 
 import {Field, reduxForm,SubmissionError} from 'redux-form';
 import axios from "axios/index";
 import {serverURL} from "../../Request/apiUrl";
+import GS_Emitter from '../../Emitter';
 
 //store
 import * as actions from '../../actions/dashboard';
@@ -20,14 +21,15 @@ const requerido = value => value ? undefined : 'required';
 
 class FormBodega extends React.Component {
 
-    shouldComponentUpdate(next_props, next_state) {
+    /*shouldComponentUpdate(next_props, next_state) {
         if (!isEqual(next_props, this.props))
             return true;
         else
             return false;
-    };
+    };*/
 
-    guardarFormulario = (form) =>
+    guardarFormulario = (form) =>{
+        this.props.peticionDeDatos(true);
         axios({
             method: 'post',
             url: serverURL + 'bodega/GuardarBodega',
@@ -36,12 +38,14 @@ class FormBodega extends React.Component {
             }
         })
             .then(function (response) {
-                //this.setState({data: response.data, request: false});
-            }.bind(this))
+                GS_Emitter.emit('Recargar');
+            })
             .catch(function (error) {
+                this.props.peticionDeDatos(false);
                 console.log("Error", error);
-                throw new SubmissionError(error);
+                throw new SubmissionError({ _error: error});
             }.bind(this));
+    };
 
     Input = ({input, type, placeholder, meta: {touched, error}, disabled}) => (
         <FormGroup>
@@ -67,7 +71,7 @@ class FormBodega extends React.Component {
         const {handleSubmit, submitting} = this.props;
         const props = this.props;
         return (
-            <Card className="w-100">
+            <Card>
                 <CardHeader className={"p-3 bg-transparent"}>
                     {
                         (props.editando)
@@ -76,7 +80,7 @@ class FormBodega extends React.Component {
                     }
                 </CardHeader>
 
-                <Form onSubmit={handleSubmit(this.guardarFormulario)} className="w-100">
+                <Form onSubmit={handleSubmit(this.guardarFormulario)}>
                     <CardBody>
 
                         {this.props.error &&
@@ -157,6 +161,10 @@ const mapDispatchToProps = dispatch => {
         cerrarForm: () => {
             dispatch(actions.abrirForm(false));
         },
+        peticionDeDatos: (valor) => {
+            console.log("valor",valor);
+        dispatch(actions.peticionDeDatos(valor));
+    }
     };
 };
 

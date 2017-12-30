@@ -125,7 +125,7 @@ class Layout extends Component {
                             </ul>
                         </nav>
 
-                        <BlockUi tag="div" blocking={this.props.loadingData} className="w-100">
+                        <BlockUi tag="div" blocking={this.props.peticionDeDatos} className="w-100">
 
                             <div className="content-wrapper fondoMainContent">
 
@@ -158,7 +158,7 @@ class Layout extends Component {
 
 const mapStateToProps = state => {
     return {
-        loadingData: state.Dashboard.loadingData,
+        peticionDeDatos: state.Dashboard.peticionDeDatos,
     };
 };
 

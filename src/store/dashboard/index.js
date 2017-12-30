@@ -4,7 +4,8 @@ import * as types from '../../actions/dashboard/actions';
 
 const initialState = {
     abrirFormulario: false,
-    dataFormulario: []
+    dataFormulario: [],
+    peticionDeDatos: true
 };
 
 const dashboard = (state = initialState, action) => {
@@ -23,6 +24,10 @@ const dashboard = (state = initialState, action) => {
                 dataFormulario: {$set: action.data}
             });
 
+        case types.PETICION_DE_DATOS:
+            return update(state, {
+                peticionDeDatos: {$set: action.estado},
+            });
 
         default:
             return state;

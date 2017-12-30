@@ -32,7 +32,7 @@ const states = [
         title: 'Bodegas GS',
         component: () => <Layout> <Bodega/> </Layout>,
         resolve: [{
-            token: 'login',
+            token: 'bodegas',
             deps: ['$transition$'],
             resolveFn: (transition) => console.log("BODEGA")
         }]

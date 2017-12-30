@@ -13,3 +13,10 @@ export const dataFormulario = (data) =>{
         data
     };
 };
+
+export const peticionDeDatos = (data) =>{
+  return{
+      type: types.PETICION_DE_DATOS,
+      estado: data
+  }
+};
