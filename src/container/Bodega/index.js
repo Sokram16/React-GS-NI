@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Card, CardHeader, CardBody, Button} from 'reactstrap';
+import {Card, CardHeader, CardBody, Button, Row, Col} from 'reactstrap';
 
 //store
 import * as actions from '../../actions/dashboard';
@@ -49,24 +49,21 @@ class Bodega extends React.Component {
         const props = this.props;
         return (
             <Card className="w-100">
-                <CardHeader className="d-flex justify-content-start p-3">
-                    <Button color={"primary"}
+                <CardHeader className="p-3">
+                    <Button color="info"
                             onClick={(e) => props.abrirForm()}
                     > <FaAgregar/> Agregar</Button>
                 </CardHeader>
-                <CardBody className="d-flex justify-content-start p-3">
+                <CardBody className="p-3">
 
-                    <div className={(props.abierto) ? "w-50" : "w-100"}>
-                        <TableBodega data={state.data}/>
-                    </div>
-                    {
-                        (props.abierto)
-                            ?
-                            <div className="w-50 pl-3">
-                                <FormBodega/>
-                            </div>
-                            : null
-                    }
+                    <Row>
+                        <Col>
+                            <TableBodega data={state.data}/>
+                        </Col>
+                        {
+                            (props.abierto && <Col><FormBodega/></Col>)
+                        }
+                    </Row>
 
                 </CardBody>
             </Card>

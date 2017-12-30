@@ -21,7 +21,7 @@ class TableBodega extends React.Component {
         return (
             <div className="w-100">
                 <ReactTable data={props.data}
-                            columns={columnsTableBodega(props.data,props.editarForm)}
+                            columns={columnsTableBodega(props.editarForm)}
                             pageSize={pageSize}
                             pageSizeOptions={[5, 10,20,50,100]}
                             showPagination={true}
@@ -43,9 +43,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        editarForm: (data,id) => {
-            const editar = find(data,{"id": id});
-            dispatch(actions.dataFormulario(editar));
+        editarForm: (data) => {
+            dispatch(actions.dataFormulario(data));
         }
     };
 };

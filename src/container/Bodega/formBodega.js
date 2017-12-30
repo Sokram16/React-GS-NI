@@ -1,7 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Card, CardHeader, CardBody, CardFooter, Form, FormGroup, Input, Button, FormFeedback, Alert} from 'reactstrap';
-import {Field, reduxForm, SubmissionError} from 'redux-form';
+import {Field, reduxForm,SubmissionError} from 'redux-form';
+import axios from "axios/index";
+import {serverURL} from "../../Request/apiUrl";
 
 //store
 import * as actions from '../../actions/dashboard';
@@ -25,17 +27,21 @@ class FormBodega extends React.Component {
             return false;
     };
 
-    guardarFormulario = (form) => console.log("form", form);
-    /*authService.login(form).then((info) => {
-
-        event.emit(EVENT.LOGIN_CONFIRMED, info);
-
-    }).catch((error) => {
-        const errors = {
-            _error: get(error.response.data, 'error', 'error.response.data')
-        };
-        throw new SubmissionError(errors);
-    });*/
+    guardarFormulario = (form) =>
+        axios({
+            method: 'post',
+            url: serverURL + 'bodega/GuardarBodega',
+            data: {
+                ...form
+            }
+        })
+            .then(function (response) {
+                //this.setState({data: response.data, request: false});
+            }.bind(this))
+            .catch(function (error) {
+                console.log("Error", error);
+                throw new SubmissionError(error);
+            }.bind(this));
 
     Input = ({input, type, placeholder, meta: {touched, error}, disabled}) => (
         <FormGroup>
@@ -77,10 +83,10 @@ class FormBodega extends React.Component {
                         <Alert color="danger">{this.props.error}</Alert>
                         }
 
-                        <Field name="id"
+                        <Field name="codigo"
                                type="text"
                                component={this.Input}
-                               placeholder="Id Bodega"
+                               placeholder="Còdigo"
                                disabled={submitting}
                                validate={[requerido]}
                         />
@@ -97,6 +103,14 @@ class FormBodega extends React.Component {
                                type="textarea"
                                component={this.Input}
                                placeholder="Descripciòn"
+                               disabled={submitting}
+                               validate={[requerido]}
+                        />
+
+                        <Field name="direccion"
+                               type="textarea"
+                               component={this.Input}
+                               placeholder="Direcciòn"
                                disabled={submitting}
                                validate={[requerido]}
                         />
@@ -129,7 +143,6 @@ const mapStateToProps = state => {
     const dataForm = state.Dashboard.dataFormulario;
     const editando = (isEmpty(dataForm) || dataForm.id < 1) ? false : true;
 
-    console.log("editando", editando);
     return {
         dataForm: dataForm,
         editando: editando,
@@ -147,10 +160,7 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-/*FormBodega = reduxForm({
-    form: 'formulario'
-})(FormBodega);*/
+
 export default connect(mapStateToProps, mapDispatchToProps)(reduxForm({
     form: 'formulario'
 })(FormBodega))
-//export default connect(mapStateToProps, mapDispatchToProps)(FormBodega);

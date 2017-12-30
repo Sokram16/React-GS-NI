@@ -5,14 +5,21 @@ import {Button} from 'reactstrap';
 import FaEdit from 'react-icons/lib/fa/edit';
 import FaEliminar from 'react-icons/lib/fa/trash-o';
 
-export const columnsTableBodega = (data,editarForm) => {
+export const columnsTableBodega = (editarForm) => {
 
     const columns = [
         {
+            show:false,
             headerClassName: "text-left",
             maxWidth: 100,
             Header: 'IdBodega',
             accessor: 'id'
+        },
+        {
+            headerClassName: "text-left",
+            maxWidth: 100,
+            Header: 'Còdigo',
+            accessor: 'codigo'
         },
         {
             headerClassName: "text-left",
@@ -37,10 +44,10 @@ export const columnsTableBodega = (data,editarForm) => {
             className: "d-flex",
             maxWidth: 70,
             accessor: 'id',
-            Cell: ({value}) => (
+            Cell: (row) => (
                 <Button color={"info"}
                         className="mx-auto"
-                        onClick={()=>editarForm(data,value)}>
+                        onClick={()=>editarForm(row.row)}>
                     <FaEdit className={"ml-1 mr-1"}/>
                 </Button>
             )
@@ -50,10 +57,10 @@ export const columnsTableBodega = (data,editarForm) => {
             className: "d-flex",
             maxWidth: 70,
             accessor: 'id',
-            Cell: ({value}) => (
+            Cell: (row) => (
                 <Button color={"danger"}
                         className="mx-auto"
-                        onClick={()=>editarForm(data,value)}>
+                        onClick={()=>editarForm(row.row)}>
                     <FaEliminar className={"ml-1 mr-1"}/>
                 </Button>
             )
