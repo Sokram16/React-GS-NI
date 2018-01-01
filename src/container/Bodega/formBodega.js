@@ -1,10 +1,11 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Card, CardHeader, CardBody, CardFooter, Form, FormGroup, Input, Button, FormFeedback, Alert} from 'reactstrap';
-import {Field, reduxForm,SubmissionError} from 'redux-form';
+import {Card, CardHeader, CardBody, CardFooter, Form, FormGroup, Input, Button, FormFeedback,Label} from 'reactstrap';
+import {Field, reduxForm} from 'redux-form';
 import axios from "axios/index";
 import {serverURL} from "../../Request/apiUrl";
 import GS_Emitter from '../../Emitter';
+import {ALERTA} from "../../Emitter/Constants";
 
 //store
 import * as actions from '../../actions/dashboard';
@@ -16,20 +17,25 @@ import isEqual from 'lodash/isEqual';
 //icons
 import FaGuardar from 'react-icons/lib/fa/floppy-o';
 import FaCerrar from 'react-icons/lib/fa/times-circle'
+import FaEdit from 'react-icons/lib/fa/edit';
+import FaPlus from 'react-icons/lib/fa/plus';
 
 const requerido = value => value ? undefined : 'required';
 
 class FormBodega extends React.Component {
 
-    /*shouldComponentUpdate(next_props, next_state) {
-        if (!isEqual(next_props, this.props))
-            return true;
-        else
-            return false;
-    };*/
+    constructor(props) {
+        super(props);
+    }
 
-    guardarFormulario = (form) =>{
-        this.props.peticionDeDatos(true);
+    shouldComponentUpdate(next_props, next_state) {
+        return (!isEqual(next_props, this.props) || !isEqual(next_state, this.state));
+    };
+
+    guardarFormulario = (form) => {
+
+        this.props.estadoPeticion(true);
+
         axios({
             method: 'post',
             url: serverURL + 'bodega/GuardarBodega',
@@ -38,23 +44,36 @@ class FormBodega extends React.Component {
             }
         })
             .then(function (response) {
-                GS_Emitter.emit('Recargar');
-            })
+
+                this.props.abrirForm();
+                this.props.estadoPeticion(false);
+
+                if (response.status !== 200)
+                    GS_Emitter.emit(ALERTA,true,true,response.data.mensaje);
+                else
+                {
+                    GS_Emitter.emit('Recargar');
+                    GS_Emitter.emit(ALERTA,true,false,response.data.mensaje);
+                }
+
+            }.bind(this))
             .catch(function (error) {
-                this.props.peticionDeDatos(false);
-                console.log("Error", error);
-                throw new SubmissionError({ _error: error});
+                GS_Emitter.emit(ALERTA,true,true,error);
+                this.props.estadoPeticion(false);
             }.bind(this));
     };
 
-    Input = ({input, type, placeholder, meta: {touched, error}, disabled}) => (
+
+    Input = ({input, id, type, placeholder, meta: {touched, error}, disabled}) => (
         <FormGroup>
+            <Label for={id+"_"}>{placeholder}</Label>
             <Input {...input}
                    placeholder={placeholder}
                    type={type}
                    valid={!(error && touched)}
                    disabled={disabled}
                    className={"form-control"}
+                   id={id+"_"}
             />
             {touched && error &&
             <FormFeedback>{
@@ -66,6 +85,11 @@ class FormBodega extends React.Component {
         </FormGroup>
     );
 
+    visibleForm = (visible) => {
+        GS_Emitter.emit(ALERTA,false);
+        this.props.abrirForm(visible);
+    };
+
     render() {
 
         const {handleSubmit, submitting} = this.props;
@@ -75,19 +99,16 @@ class FormBodega extends React.Component {
                 <CardHeader className={"p-3 bg-transparent"}>
                     {
                         (props.editando)
-                            ? <h4>Editando Bodega</h4>
-                            : <h4>Nueva Bodega</h4>
+                            ? <h4><FaEdit/> Editando Bodega</h4>
+                            : <h4><FaPlus/> Nueva Bodega</h4>
                     }
                 </CardHeader>
 
                 <Form onSubmit={handleSubmit(this.guardarFormulario)}>
-                    <CardBody>
-
-                        {this.props.error &&
-                        <Alert color="danger">{this.props.error}</Alert>
-                        }
+                    <CardBody className="p-3">
 
                         <Field name="codigo"
+                               id="codigo"
                                type="text"
                                component={this.Input}
                                placeholder="Còdigo"
@@ -130,7 +151,7 @@ class FormBodega extends React.Component {
                         >
                             <span className='semibold'> <FaGuardar/> Guardar</span>
                         </Button>
-                        <Button color={"secondary ml-3"} onClick={(e) => this.props.cerrarForm()}> <FaCerrar/> Cancelar</Button>
+                        <Button color={"secondary ml-3"} onClick={(e) => this.visibleForm(false)}> <FaCerrar/> Cancelar</Button>
                     </CardFooter>
 
                 </Form>
@@ -151,20 +172,19 @@ const mapStateToProps = state => {
         dataForm: dataForm,
         editando: editando,
         initialValues: (isEmpty(dataForm)) ? {} : dataForm,
-        enableReinitialize:true
+        enableReinitialize: true
     };
 
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        cerrarForm: () => {
-            dispatch(actions.abrirForm(false));
+        abrirForm: (visible) => {
+            dispatch(actions.abrirForm(visible));
         },
-        peticionDeDatos: (valor) => {
-            console.log("valor",valor);
-        dispatch(actions.peticionDeDatos(valor));
-    }
+        estadoPeticion: (valor) => {
+            dispatch(actions.estadoPeticion(valor));
+        }
     };
 };
 

@@ -19,6 +19,8 @@ import './css/style.css';
 import './css/custom.css';
 import "react-table/react-table.css";
 
+import Loading from '../Componentes/Loading';
+
 class Layout extends Component {
 
     toggleNavBar = (e) => {
@@ -125,7 +127,8 @@ class Layout extends Component {
                             </ul>
                         </nav>
 
-                        <BlockUi tag="div" blocking={this.props.peticionDeDatos} className="w-100">
+                        <BlockUi tag="div" blocking={this.props.peticionDeDatos} className="w-100"
+                                 loader={Loading}>
 
                             <div className="content-wrapper fondoMainContent">
 

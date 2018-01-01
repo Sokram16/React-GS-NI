@@ -14,7 +14,7 @@ export const dataFormulario = (data) =>{
     };
 };
 
-export const peticionDeDatos = (data) =>{
+export const estadoPeticion = (data) =>{
   return{
       type: types.PETICION_DE_DATOS,
       estado: data
